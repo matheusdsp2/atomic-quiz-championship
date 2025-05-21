@@ -124,14 +124,17 @@ const StudentGame = () => {
   
   const waitingForNextRound = !roundActive && showResults;
   
-  // If game ended, show final screen
+  // If game ended, show final screen with score
   if (gameEnded) {
     return (
       <div className="min-h-screen bg-blue-50 p-4 flex items-center justify-center">
         <div className="bg-white rounded-lg shadow-md p-8 text-center max-w-md">
           <h2 className="text-2xl font-bold mb-4">Jogo Finalizado!</h2>
           <p className="text-lg mb-6">Obrigado por participar!</p>
-          <p className="text-lg mb-6">Sua pontuação final: {score}</p>
+          <div className="bg-purple-100 rounded-lg p-6 mb-6">
+            <p className="text-lg text-gray-700 mb-2">Sua pontuação final:</p>
+            <p className="text-4xl font-bold text-purple-700">{score}</p>
+          </div>
           <p className="text-sm text-gray-500">Voltando para a tela inicial...</p>
         </div>
       </div>
@@ -151,10 +154,7 @@ const StudentGame = () => {
             <h2 className="text-sm font-medium text-gray-500">Jogador</h2>
             <p className="font-bold text-lg">{userName}</p>
           </div>
-          <div>
-            <h2 className="text-sm font-medium text-gray-500">Pontuação</h2>
-            <p className="font-bold text-lg">{score}</p>
-          </div>
+          {/* Score removed from here - will only show at the end */}
         </div>
       </div>
       

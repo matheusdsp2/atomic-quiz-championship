@@ -14,12 +14,12 @@ interface ScoreBoardProps {
 const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, limit = 5 }) => {
   // Sort players by score (descending)
   const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
-  // Limit number of players shown
+  // Limit number of players shown to top 5 by default
   const topPlayers = sortedPlayers.slice(0, limit);
   
   return (
     <div className="bg-white rounded-lg shadow-md p-4">
-      <h2 className="text-xl font-bold mb-3 text-center">Ranking</h2>
+      <h2 className="text-xl font-bold mb-3 text-center">Top 5 Alunos</h2>
       {topPlayers.length > 0 ? (
         <div className="space-y-2">
           {topPlayers.map((player, index) => (
