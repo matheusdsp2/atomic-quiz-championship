@@ -24,7 +24,7 @@ const mockOptions = [
 ];
 
 const StudentGame = () => {
-  const { userName, roomId, isTeacher } = useSocket();
+  const { userName, roomId, isTeacher, setRoomId, setUserName } = useSocket();
   const navigate = useNavigate();
   
   const [currentElement, setCurrentElement] = useState<Element | null>(null);
@@ -36,6 +36,7 @@ const StudentGame = () => {
   const [timePerQuestion, setTimePerQuestion] = useState(20);
   const [score, setScore] = useState(0);
   const [hasAnswered, setHasAnswered] = useState(false);
+  const [gameEnded, setGameEnded] = useState(false);
   
   // Check if user is authorized to be on this page
   useEffect(() => {
@@ -70,6 +71,30 @@ const StudentGame = () => {
     return () => clearTimeout(timer);
   }, [timePerQuestion]);
   
+  // Listen for game end event (in real app from socket)
+  useEffect(() => {
+    // Mock game end detection - would be a socket event in real app
+    const mockGameEndTimer = setTimeout(() => {
+      // This would actually be triggered by a socket event from teacher
+      // For demo purposes we're just using a timer
+    }, 60000); // Demo timer, in real app this would be a socket event
+    
+    return () => clearTimeout(mockGameEndTimer);
+  }, []);
+  
+  // Handle game end
+  const handleGameEnd = () => {
+    setGameEnded(true);
+    toast.success("Jogo finalizado!");
+    
+    // Reset game state and navigate to home
+    setTimeout(() => {
+      setRoomId(null);
+      setUserName(null);
+      navigate('/');
+    }, 3000); // Give user some time to see the final message
+  };
+  
   const handleAnswerSelect = (element: Element) => {
     // Verificar se o aluno já respondeu esta pergunta
     if (hasAnswered) {
@@ -98,6 +123,20 @@ const StudentGame = () => {
   };
   
   const waitingForNextRound = !roundActive && showResults;
+  
+  // If game ended, show final screen
+  if (gameEnded) {
+    return (
+      <div className="min-h-screen bg-blue-50 p-4 flex items-center justify-center">
+        <div className="bg-white rounded-lg shadow-md p-8 text-center max-w-md">
+          <h2 className="text-2xl font-bold mb-4">Jogo Finalizado!</h2>
+          <p className="text-lg mb-6">Obrigado por participar!</p>
+          <p className="text-lg mb-6">Sua pontuação final: {score}</p>
+          <p className="text-sm text-gray-500">Voltando para a tela inicial...</p>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className="min-h-screen bg-blue-50 p-4">

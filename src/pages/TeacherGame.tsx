@@ -15,7 +15,6 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 
 // Mock data for testing
@@ -30,7 +29,7 @@ const mockPlayers = [
 ];
 
 const TeacherGame = () => {
-  const { roomId, isTeacher } = useSocket();
+  const { roomId, isTeacher, setRoomId, setUserName, setIsTeacher } = useSocket();
   const navigate = useNavigate();
   
   const [currentQuestion, setCurrentQuestion] = useState<{ 
@@ -48,6 +47,7 @@ const TeacherGame = () => {
   const [totalRounds, setTotalRounds] = useState(10);
   const [players, setPlayers] = useState(mockPlayers);
   const [showSettings, setShowSettings] = useState(!currentQuestion);
+  const [showRanking, setShowRanking] = useState(false);
   
   // Filtrar famílias de elementos, removendo os metais de transição conforme solicitado
   const availableFamilies = ELEMENT_FAMILIES.filter(
@@ -78,6 +78,7 @@ const TeacherGame = () => {
     setShowResults(false);
     setRoundActive(true);
     setShowSettings(false);
+    setShowRanking(false);
     
     // In real app, this would emit the new question to all students
     console.log("Starting new round", newQuestion);
@@ -87,24 +88,29 @@ const TeacherGame = () => {
   const handleTimeUp = () => {
     setRoundActive(false);
     setShowResults(true);
+    setShowRanking(true);
     
     // In real app, this would tell all clients to show results
-    if (roundNumber < totalRounds) {
-      setRoundNumber(prev => prev + 1);
-    } else {
-      toast.success("Jogo finalizado!");
-      // In real app, would show final results
-    }
+    // Only increment round number here, not in handleNextRound
+    // This fixes the bug where round was incrementing twice
   };
   
   // Next round or finish game
   const handleNextRound = () => {
-    if (roundNumber < totalRounds) {
+    // Increment round number here
+    const nextRound = roundNumber + 1;
+    
+    if (nextRound <= totalRounds) {
+      setRoundNumber(nextRound);
       startNewRound();
     } else {
       // End game logic here
       toast.success("Jogo finalizado!");
-      // Would navigate to results screen in full implementation
+      // Reset the game state and navigate to home
+      setRoomId(null);
+      setUserName(null);
+      setIsTeacher(false);
+      navigate('/');
     }
   };
   
@@ -274,9 +280,23 @@ const TeacherGame = () => {
           </div>
         </div>
         
-        {/* Right column - Score board */}
+        {/* Right column - Score board (only show when results are displayed) */}
         <div>
-          <ScoreBoard players={players} limit={10} />
+          {showRanking && (
+            <ScoreBoard players={players} limit={10} />
+          )}
+          {!showRanking && showResults && (
+            <div className="bg-white rounded-lg shadow-md p-6 text-center">
+              <h2 className="text-xl font-bold mb-3">Ranking</h2>
+              <p>O ranking será exibido após o término da rodada.</p>
+            </div>
+          )}
+          {!showResults && !showRanking && (
+            <div className="bg-white rounded-lg shadow-md p-6 text-center">
+              <h2 className="text-xl font-bold mb-3">Ranking</h2>
+              <p>O ranking será exibido após o término da rodada.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
