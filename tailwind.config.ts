@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,16 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				quiz: {
+					red: '#e53e3e',
+					blue: '#3182ce',
+					green: '#38a169',
+					yellow: '#ecc94b',
+					purple: '#805ad5',
+					teal: '#319795',
+					indigo: '#5a67d8',
+					pink: '#d53f8c'
 				}
 			},
 			borderRadius: {
@@ -84,11 +95,21 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-answer': {
+					'0%, 100%': { transform: 'scale(1)' },
+					'50%': { transform: 'scale(1.05)' }
+				},
+				'countdown': {
+					'0%': { width: '100%' },
+					'100%': { width: '0%' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-answer': 'pulse-answer 0.5s ease-in-out',
+				'countdown': 'countdown var(--duration) linear forwards'
 			}
 		}
 	},
