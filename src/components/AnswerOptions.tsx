@@ -33,6 +33,9 @@ const AnswerOptions: React.FC<AnswerOptionsProps> = ({
         const isCorrect = correctAnswer?.symbol === option.symbol;
         const isWrong = showResults && isSelected && !isCorrect;
         
+        // Desabilita o botão se já houver uma resposta selecionada ou se o componente estiver desabilitado
+        const buttonDisabled = disabled || showResults || selectedAnswer !== null;
+        
         return (
           <button
             key={option.symbol}
@@ -42,10 +45,10 @@ const AnswerOptions: React.FC<AnswerOptionsProps> = ({
               ${isSelected ? 'ring-4 ring-white' : ''}
               ${showResults && isCorrect ? 'animate-pulse-answer bg-opacity-100' : 'bg-opacity-90'}
               ${isWrong ? 'bg-opacity-50 line-through' : ''}
-              ${!disabled && !showResults ? 'hover:scale-105 active:scale-95' : 'cursor-default'}
+              ${!buttonDisabled ? 'hover:scale-105 active:scale-95' : 'cursor-default opacity-80'}
             `}
-            onClick={() => !disabled && !showResults && onSelect(option)}
-            disabled={disabled || showResults}
+            onClick={() => !buttonDisabled && onSelect(option)}
+            disabled={buttonDisabled}
           >
             {option.name}
           </button>

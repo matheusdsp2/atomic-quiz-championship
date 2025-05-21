@@ -35,6 +35,7 @@ const StudentGame = () => {
   const [roundActive, setRoundActive] = useState(false);
   const [timePerQuestion, setTimePerQuestion] = useState(20);
   const [score, setScore] = useState(0);
+  const [hasAnswered, setHasAnswered] = useState(false);
   
   // Check if user is authorized to be on this page
   useEffect(() => {
@@ -57,6 +58,7 @@ const StudentGame = () => {
     setCorrectAnswer(null);
     setShowResults(false);
     setRoundActive(true);
+    setHasAnswered(false);
     
     // Simulate timer end after timePerQuestion seconds
     const timer = setTimeout(() => {
@@ -69,7 +71,16 @@ const StudentGame = () => {
   }, [timePerQuestion]);
   
   const handleAnswerSelect = (element: Element) => {
+    // Verificar se o aluno já respondeu esta pergunta
+    if (hasAnswered) {
+      return;
+    }
+    
     setSelectedAnswer(element);
+    setHasAnswered(true);
+    
+    // Exibir toast de confirmação
+    toast.success("Resposta enviada!");
     
     // In real app, this would send the answer to the server
     console.log(`Selected answer: ${element.name}`);
@@ -125,6 +136,13 @@ const StudentGame = () => {
               Qual o nome do elemento com o símbolo:
             </h2>
             <ElementSymbol element={currentElement} />
+            
+            {/* Status da resposta */}
+            {hasAnswered && roundActive && (
+              <div className="mt-4 text-green-600 font-medium">
+                Resposta enviada! Aguardando o fim da rodada...
+              </div>
+            )}
           </div>
         ) : (
           <div className="text-center p-8">
@@ -140,7 +158,7 @@ const StudentGame = () => {
             selectedAnswer={selectedAnswer}
             correctAnswer={correctAnswer}
             showResults={showResults}
-            disabled={!roundActive}
+            disabled={!roundActive || hasAnswered}
           />
         )}
         

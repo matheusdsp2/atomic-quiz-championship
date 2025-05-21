@@ -5,9 +5,18 @@ import ElementSymbol from '@/components/ElementSymbol';
 import ScoreBoard from '@/components/ScoreBoard';
 import CountdownTimer from '@/components/CountdownTimer';
 import { Button } from '@/components/ui/button';
-import { Element, ElementFamily, ELEMENT_FAMILIES, generateQuestion } from '@/data/elements';
+import { 
+  Element, 
+  ElementFamily, 
+  ELEMENT_FAMILIES, 
+  generateQuestion 
+} from '@/data/elements';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 
 // Mock data for testing
 const mockPlayers = [
@@ -38,6 +47,14 @@ const TeacherGame = () => {
   const [roundNumber, setRoundNumber] = useState(1);
   const [totalRounds, setTotalRounds] = useState(10);
   const [players, setPlayers] = useState(mockPlayers);
+  const [showSettings, setShowSettings] = useState(!currentQuestion);
+  
+  // Filtrar famílias de elementos, removendo os metais de transição conforme solicitado
+  const availableFamilies = ELEMENT_FAMILIES.filter(
+    family => family !== ElementFamily.TRANSITION_METALS
+                && family !== ElementFamily.LANTHANIDES
+                && family !== ElementFamily.ACTINIDES
+  );
   
   // Check if user is authorized to be on this page
   useEffect(() => {
@@ -49,11 +66,18 @@ const TeacherGame = () => {
   
   // Start a new round with a new question
   const startNewRound = () => {
+    // Verificar se há famílias selecionadas
+    if (selectedFamilies.length === 0) {
+      toast.error("Selecione pelo menos uma família de elementos");
+      return;
+    }
+    
     // Generate a new question from the selected families
     const newQuestion = generateQuestion(selectedFamilies);
     setCurrentQuestion(newQuestion);
     setShowResults(false);
     setRoundActive(true);
+    setShowSettings(false);
     
     // In real app, this would emit the new question to all students
     console.log("Starting new round", newQuestion);
@@ -84,6 +108,16 @@ const TeacherGame = () => {
     }
   };
   
+  const toggleFamilySelection = (family: ElementFamily) => {
+    setSelectedFamilies(current => {
+      if (current.includes(family)) {
+        return current.filter(f => f !== family);
+      } else {
+        return [...current, family];
+      }
+    });
+  };
+  
   return (
     <div className="min-h-screen bg-blue-50 p-4">
       {/* Header with room info */}
@@ -101,6 +135,15 @@ const TeacherGame = () => {
             <h2 className="text-sm font-medium text-gray-500">Rodada</h2>
             <p className="font-bold text-lg">{roundNumber}/{totalRounds}</p>
           </div>
+          {!roundActive && (
+            <Button 
+              variant={showSettings ? "outline" : "default"}
+              onClick={() => setShowSettings(!showSettings)}
+              className="mt-2 sm:mt-0"
+            >
+              {showSettings ? "Ocultar Configurações" : "Configurações"}
+            </Button>
+          )}
         </div>
       </div>
       
@@ -108,6 +151,59 @@ const TeacherGame = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
         {/* Left column - Game controls */}
         <div className="md:col-span-2">
+          {/* Settings panel */}
+          {showSettings && !roundActive && (
+            <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+              <h2 className="text-xl font-bold mb-4">Configurações</h2>
+              
+              {/* Time settings */}
+              <div className="mb-8">
+                <h3 className="font-medium mb-2">Tempo por questão: {timePerQuestion} segundos</h3>
+                <Slider 
+                  value={[timePerQuestion]} 
+                  min={5} 
+                  max={60} 
+                  step={5}
+                  onValueChange={(value) => setTimePerQuestion(value[0])} 
+                  className="w-full max-w-sm"
+                />
+              </div>
+              
+              {/* Total rounds settings */}
+              <div className="mb-8">
+                <h3 className="font-medium mb-2">Número total de rodadas: {totalRounds}</h3>
+                <Slider 
+                  value={[totalRounds]} 
+                  min={5} 
+                  max={30} 
+                  step={5}
+                  onValueChange={(value) => setTotalRounds(value[0])} 
+                  className="w-full max-w-sm"
+                />
+              </div>
+              
+              {/* Element family selection */}
+              <div>
+                <h3 className="font-medium mb-2">Famílias de elementos:</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
+                  {availableFamilies.map(family => (
+                    <div key={family} className="flex items-center space-x-2">
+                      <Switch 
+                        id={`switch-${family}`} 
+                        checked={selectedFamilies.includes(family)}
+                        onCheckedChange={() => toggleFamilySelection(family)}
+                      />
+                      <Label htmlFor={`switch-${family}`}>{family}</Label>
+                    </div>
+                  ))}
+                </div>
+                {selectedFamilies.length === 0 && (
+                  <p className="text-red-500 text-sm mt-2">Selecione pelo menos uma família</p>
+                )}
+              </div>
+            </div>
+          )}
+          
           {/* Timer */}
           <CountdownTimer 
             duration={timePerQuestion} 
@@ -168,13 +264,13 @@ const TeacherGame = () => {
               <div className="text-center">
                 <p className="text-lg font-medium">Rodada em andamento...</p>
               </div>
-            ) : (
+            ) : currentQuestion ? (
               <div className="flex justify-center">
                 <Button onClick={startNewRound} size="lg">
-                  Iniciar Rodada
+                  Iniciar Próxima Rodada
                 </Button>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
         
