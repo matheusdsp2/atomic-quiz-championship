@@ -21,7 +21,15 @@ const Index = () => {
             className="bg-white text-blue-700 hover:bg-blue-50 text-lg px-8 py-6"
             size="lg"
           >
-            Começar a Jogar
+            Jogar Online
+          </Button>
+          <Button 
+            onClick={() => navigate('/training')}
+            className="bg-blue-600 text-white hover:bg-blue-700 text-lg px-8 py-6 border-2 border-white"
+            size="lg"
+            variant="outline"
+          >
+            Modo Treino
           </Button>
         </div>
       </div>
@@ -35,9 +43,9 @@ const Index = () => {
             {/* Feature 1 */}
             <div className="bg-blue-50 rounded-xl p-6 shadow-md">
               <div className="bg-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center mb-4 text-xl font-bold">1</div>
-              <h3 className="text-xl font-bold mb-2">Crie ou Entre em uma Sala</h3>
+              <h3 className="text-xl font-bold mb-2">Escolha Seu Modo</h3>
               <p className="text-gray-600">
-                Professores criam salas com códigos únicos, enquanto alunos entram usando estes códigos.
+                Jogue online com outros estudantes ou pratique sozinho no modo treino.
               </p>
             </div>
             
@@ -55,7 +63,7 @@ const Index = () => {
               <div className="bg-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center mb-4 text-xl font-bold">3</div>
               <h3 className="text-xl font-bold mb-2">Acompanhe Seu Progresso</h3>
               <p className="text-gray-600">
-                Veja sua posição no ranking e aprenda com cada rodada do jogo.
+                Veja sua pontuação e aprenda com cada rodada do jogo.
               </p>
             </div>
           </div>
@@ -65,13 +73,22 @@ const Index = () => {
       {/* Call to Action */}
       <div className="bg-gray-100 py-12 text-center">
         <h2 className="text-3xl font-bold mb-6">Pronto para Começar?</h2>
-        <Button 
-          onClick={() => navigate('/join')}
-          className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-6"
-          size="lg"
-        >
-          Jogar Agora
-        </Button>
+        <div className="space-x-4">
+          <Button 
+            onClick={() => navigate('/join')}
+            className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-6"
+            size="lg"
+          >
+            Jogar Online
+          </Button>
+          <Button 
+            onClick={() => navigate('/training')}
+            className="bg-green-600 hover:bg-green-700 text-lg px-8 py-6"
+            size="lg"
+          >
+            Treinar Solo
+          </Button>
+        </div>
       </div>
       
       {/* Footer */}
