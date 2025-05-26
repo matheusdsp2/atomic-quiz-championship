@@ -40,21 +40,14 @@ const TeacherGame = () => {
   const [roundActive, setRoundActive] = useState(false);
   const [timePerQuestion, setTimePerQuestion] = useState(20);
   const [selectedFamilies, setSelectedFamilies] = useState<ElementFamily[]>([
-    ElementFamily.ALKALI_METALS,
-    ElementFamily.HALOGENS
+    ElementFamily.FAMILY_1A,
+    ElementFamily.FAMILY_7A
   ]);
   const [roundNumber, setRoundNumber] = useState(1);
   const [totalRounds, setTotalRounds] = useState(10);
   const [players, setPlayers] = useState(mockPlayers);
   const [showSettings, setShowSettings] = useState(!currentQuestion);
   const [showRanking, setShowRanking] = useState(false);
-  
-  // Filtrar famílias de elementos, removendo os metais de transição conforme solicitado
-  const availableFamilies = ELEMENT_FAMILIES.filter(
-    family => family !== ElementFamily.TRANSITION_METALS
-                && family !== ElementFamily.LANTHANIDES
-                && family !== ElementFamily.ACTINIDES
-  );
   
   // Check if user is authorized to be on this page
   useEffect(() => {
@@ -192,7 +185,7 @@ const TeacherGame = () => {
               <div>
                 <h3 className="font-medium mb-2">Famílias de elementos:</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
-                  {availableFamilies.map(family => (
+                  {ELEMENT_FAMILIES.map(family => (
                     <div key={family} className="flex items-center space-x-2">
                       <Switch 
                         id={`switch-${family}`} 

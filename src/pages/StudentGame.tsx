@@ -4,7 +4,7 @@ import { useSocket } from '@/contexts/SocketContext';
 import ElementSymbol from '@/components/ElementSymbol';
 import AnswerOptions from '@/components/AnswerOptions';
 import CountdownTimer from '@/components/CountdownTimer';
-import { Element } from '@/data/elements';
+import { Element, ElementFamily } from '@/data/elements';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -13,14 +13,14 @@ const mockQuestion = {
   symbol: "Na",
   name: "Sódio",
   atomicNumber: 11,
-  family: "Metais Alcalinos" as any
+  family: ElementFamily.FAMILY_1A
 };
 
 const mockOptions = [
-  { symbol: "Na", name: "Sódio", atomicNumber: 11, family: "Metais Alcalinos" as any },
-  { symbol: "K", name: "Potássio", atomicNumber: 19, family: "Metais Alcalinos" as any },
-  { symbol: "Li", name: "Lítio", atomicNumber: 3, family: "Metais Alcalinos" as any },
-  { symbol: "Ca", name: "Cálcio", atomicNumber: 20, family: "Metais Alcalino-Terrosos" as any }
+  { symbol: "Na", name: "Sódio", atomicNumber: 11, family: ElementFamily.FAMILY_1A },
+  { symbol: "K", name: "Potássio", atomicNumber: 19, family: ElementFamily.FAMILY_1A },
+  { symbol: "Li", name: "Lítio", atomicNumber: 3, family: ElementFamily.FAMILY_1A },
+  { symbol: "Ca", name: "Cálcio", atomicNumber: 20, family: ElementFamily.FAMILY_2A }
 ];
 
 const StudentGame = () => {

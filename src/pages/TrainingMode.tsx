@@ -3,22 +3,21 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import ElementSymbol from '@/components/ElementSymbol';
 import AnswerOptions from '@/components/AnswerOptions';
 import CountdownTimer from '@/components/CountdownTimer';
 import { Element, ElementFamily, generateQuestion, ELEMENT_FAMILIES } from '@/data/elements';
 import { toast } from 'sonner';
 import { ArrowLeft } from 'lucide-react';
+import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
 
 const TrainingMode = () => {
   const navigate = useNavigate();
   
   // Configuration state
-  const [selectedFamilies, setSelectedFamilies] = useState<ElementFamily[]>([]);
+  const [selectedFamilies, setSelectedFamilies] = useState<ElementFamily[]>([ElementFamily.FAMILY_1A, ElementFamily.FAMILY_7A]);
   const [timePerQuestion, setTimePerQuestion] = useState(20);
   const [numberOfQuestions, setNumberOfQuestions] = useState(10);
   
@@ -35,6 +34,7 @@ const TrainingMode = () => {
   const [hasAnswered, setHasAnswered] = useState(false);
   const [gameFinished, setGameFinished] = useState(false);
   const [usedElements, setUsedElements] = useState<Element[]>([]);
+  const [showSettings, setShowSettings] = useState(true);
 
   const generateNewQuestion = () => {
     if (selectedFamilies.length === 0) {
@@ -64,6 +64,7 @@ const TrainingMode = () => {
     setCurrentQuestionNumber(1);
     setUsedElements([]);
     setGameFinished(false);
+    setShowSettings(false);
     generateNewQuestion();
   };
 
@@ -121,11 +122,17 @@ const TrainingMode = () => {
     setScore(0);
     setCurrentQuestionNumber(1);
     setUsedElements([]);
+    setShowSettings(true);
   };
 
-  // Handle family selection change
-  const handleFamilyChange = (values: string[]) => {
-    setSelectedFamilies(values as ElementFamily[]);
+  const toggleFamilySelection = (family: ElementFamily) => {
+    setSelectedFamilies(current => {
+      if (current.includes(family)) {
+        return current.filter(f => f !== family);
+      } else {
+        return [...current, family];
+      }
+    });
   };
 
   if (gameFinished) {
@@ -170,75 +177,68 @@ const TrainingMode = () => {
           </div>
 
           <Card className="p-6">
-            <Tabs defaultValue="families" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="families">Famílias de Elementos</TabsTrigger>
-                <TabsTrigger value="settings">Configurações</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="families" className="space-y-4">
-                <div>
-                  <Label className="text-lg font-semibold mb-4 block">
-                    Selecione as famílias de elementos para o treino:
-                  </Label>
-                  <ToggleGroup 
-                    type="multiple" 
-                    value={selectedFamilies} 
-                    onValueChange={handleFamilyChange}
-                    className="grid grid-cols-2 md:grid-cols-3 gap-2"
-                  >
-                    {ELEMENT_FAMILIES.map((family) => (
-                      <ToggleGroupItem 
-                        key={family} 
-                        value={family}
-                        className="text-sm h-auto p-3 text-center"
-                      >
-                        {family}
-                      </ToggleGroupItem>
-                    ))}
-                  </ToggleGroup>
-                  <p className="text-sm text-gray-600 mt-2">
-                    {selectedFamilies.length} família(s) selecionada(s)
-                  </p>
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="settings" className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="time" className="text-sm font-medium">
-                      Tempo por pergunta (segundos)
-                    </Label>
-                    <Input
-                      id="time"
-                      type="number"
-                      min="5"
-                      max="60"
-                      value={timePerQuestion}
-                      onChange={(e) => setTimePerQuestion(Number(e.target.value))}
-                      className="mt-1"
-                    />
-                  </div>
-                  
-                  <div>
-                    <Label htmlFor="questions" className="text-sm font-medium">
-                      Número de perguntas
-                    </Label>
-                    <Input
-                      id="questions"
-                      type="number"
-                      min="1"
-                      max="50"
-                      value={numberOfQuestions}
-                      onChange={(e) => setNumberOfQuestions(Number(e.target.value))}
-                      className="mt-1"
-                    />
-                  </div>
-                </div>
-              </TabsContent>
-            </Tabs>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold">Configurações do Treino</h2>
+              <Button 
+                variant={showSettings ? "outline" : "default"}
+                onClick={() => setShowSettings(!showSettings)}
+              >
+                {showSettings ? "Ocultar Configurações" : "Mostrar Configurações"}
+              </Button>
+            </div>
 
-            <div className="mt-6 pt-6 border-t">
+            {/* Settings panel */}
+            {showSettings && (
+              <>
+                {/* Time settings */}
+                <div className="mb-8">
+                  <h3 className="font-medium mb-2">Tempo por questão: {timePerQuestion} segundos</h3>
+                  <Slider 
+                    value={[timePerQuestion]} 
+                    min={5} 
+                    max={60} 
+                    step={5}
+                    onValueChange={(value) => setTimePerQuestion(value[0])} 
+                    className="w-full max-w-sm"
+                  />
+                </div>
+                
+                {/* Total questions settings */}
+                <div className="mb-8">
+                  <h3 className="font-medium mb-2">Número de questões: {numberOfQuestions}</h3>
+                  <Slider 
+                    value={[numberOfQuestions]} 
+                    min={5} 
+                    max={30} 
+                    step={5}
+                    onValueChange={(value) => setNumberOfQuestions(value[0])} 
+                    className="w-full max-w-sm"
+                  />
+                </div>
+                
+                {/* Element family selection */}
+                <div className="mb-6">
+                  <h3 className="font-medium mb-2">Famílias de elementos:</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
+                    {ELEMENT_FAMILIES.map(family => (
+                      <div key={family} className="flex items-center space-x-2">
+                        <Switch 
+                          id={`switch-${family}`} 
+                          checked={selectedFamilies.includes(family)}
+                          onCheckedChange={() => toggleFamilySelection(family)}
+                        />
+                        <Label htmlFor={`switch-${family}`}>{family}</Label>
+                      </div>
+                    ))}
+                  </div>
+                  {selectedFamilies.length === 0 && (
+                    <p className="text-red-500 text-sm mt-2">Selecione pelo menos uma família</p>
+                  )}
+                </div>
+              </>
+            )}
+
+            <div className="pt-6 border-t">
               <Button 
                 onClick={startGame}
                 className="w-full text-lg py-6"
