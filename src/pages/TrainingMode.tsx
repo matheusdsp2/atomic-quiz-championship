@@ -123,6 +123,11 @@ const TrainingMode = () => {
     setUsedElements([]);
   };
 
+  // Handle family selection change
+  const handleFamilyChange = (values: string[]) => {
+    setSelectedFamilies(values as ElementFamily[]);
+  };
+
   if (gameFinished) {
     return (
       <div className="min-h-screen bg-blue-50 p-4 flex items-center justify-center">
@@ -179,7 +184,7 @@ const TrainingMode = () => {
                   <ToggleGroup 
                     type="multiple" 
                     value={selectedFamilies} 
-                    onValueChange={setSelectedFamilies}
+                    onValueChange={handleFamilyChange}
                     className="grid grid-cols-2 md:grid-cols-3 gap-2"
                   >
                     {ELEMENT_FAMILIES.map((family) => (
