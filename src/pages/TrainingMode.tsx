@@ -1,17 +1,14 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import ElementSymbol from '@/components/ElementSymbol';
-import AnswerOptions from '@/components/AnswerOptions';
 import CountdownTimer from '@/components/CountdownTimer';
-import { Element, ElementFamily, generateQuestion, ELEMENT_FAMILIES } from '@/data/elements';
+import GameConfiguration from '@/components/GameConfiguration';
+import GameResults from '@/components/GameResults';
+import GameHeader from '@/components/GameHeader';
+import GameQuestion from '@/components/GameQuestion';
+import GameFeedback from '@/components/GameFeedback';
+import { Element, ElementFamily, generateQuestion } from '@/data/elements';
 import { toast } from 'sonner';
-import { ArrowLeft } from 'lucide-react';
-import { Slider } from '@/components/ui/slider';
-import { Switch } from '@/components/ui/switch';
 
 const TrainingMode = () => {
   const navigate = useNavigate();
@@ -135,140 +132,46 @@ const TrainingMode = () => {
     });
   };
 
+  // Render game finished screen
   if (gameFinished) {
     return (
-      <div className="min-h-screen bg-blue-50 p-4 flex items-center justify-center">
-        <Card className="p-8 text-center max-w-md">
-          <h2 className="text-2xl font-bold mb-4">Treino Concluído!</h2>
-          <div className="bg-blue-100 rounded-lg p-6 mb-6">
-            <p className="text-lg text-gray-700 mb-2">Sua pontuação:</p>
-            <p className="text-4xl font-bold text-blue-700">{score}/{numberOfQuestions}</p>
-            <p className="text-sm text-gray-600 mt-2">
-              {Math.round((score / numberOfQuestions) * 100)}% de acertos
-            </p>
-          </div>
-          <div className="space-y-3">
-            <Button onClick={resetGame} className="w-full">
-              Treinar Novamente
-            </Button>
-            <Button variant="outline" onClick={() => navigate('/')} className="w-full">
-              Voltar ao Menu
-            </Button>
-          </div>
-        </Card>
-      </div>
+      <GameResults
+        score={score}
+        totalQuestions={numberOfQuestions}
+        onResetGame={resetGame}
+        onNavigateHome={() => navigate('/')}
+      />
     );
   }
 
+  // Render configuration screen
   if (!gameStarted) {
     return (
-      <div className="min-h-screen bg-blue-50 p-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center mb-6">
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate('/')}
-              className="mr-4"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Voltar
-            </Button>
-            <h1 className="text-3xl font-bold text-blue-800">Modo Treino</h1>
-          </div>
-
-          <Card className="p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold">Configurações do Treino</h2>
-              <Button 
-                variant={showSettings ? "outline" : "default"}
-                onClick={() => setShowSettings(!showSettings)}
-              >
-                {showSettings ? "Ocultar Configurações" : "Mostrar Configurações"}
-              </Button>
-            </div>
-
-            {/* Settings panel */}
-            {showSettings && (
-              <>
-                {/* Time settings */}
-                <div className="mb-8">
-                  <h3 className="font-medium mb-2">Tempo por questão: {timePerQuestion} segundos</h3>
-                  <Slider 
-                    value={[timePerQuestion]} 
-                    min={5} 
-                    max={60} 
-                    step={5}
-                    onValueChange={(value) => setTimePerQuestion(value[0])} 
-                    className="w-full max-w-sm"
-                  />
-                </div>
-                
-                {/* Total questions settings */}
-                <div className="mb-8">
-                  <h3 className="font-medium mb-2">Número de questões: {numberOfQuestions}</h3>
-                  <Slider 
-                    value={[numberOfQuestions]} 
-                    min={5} 
-                    max={30} 
-                    step={5}
-                    onValueChange={(value) => setNumberOfQuestions(value[0])} 
-                    className="w-full max-w-sm"
-                  />
-                </div>
-                
-                {/* Element family selection */}
-                <div className="mb-6">
-                  <h3 className="font-medium mb-2">Famílias de elementos:</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
-                    {ELEMENT_FAMILIES.map(family => (
-                      <div key={family} className="flex items-center space-x-2">
-                        <Switch 
-                          id={`switch-${family}`} 
-                          checked={selectedFamilies.includes(family)}
-                          onCheckedChange={() => toggleFamilySelection(family)}
-                        />
-                        <Label htmlFor={`switch-${family}`}>{family}</Label>
-                      </div>
-                    ))}
-                  </div>
-                  {selectedFamilies.length === 0 && (
-                    <p className="text-red-500 text-sm mt-2">Selecione pelo menos uma família</p>
-                  )}
-                </div>
-              </>
-            )}
-
-            <div className="pt-6 border-t">
-              <Button 
-                onClick={startGame}
-                className="w-full text-lg py-6"
-                disabled={selectedFamilies.length === 0}
-              >
-                Iniciar Treino
-              </Button>
-            </div>
-          </Card>
-        </div>
-      </div>
+      <GameConfiguration
+        selectedFamilies={selectedFamilies}
+        timePerQuestion={timePerQuestion}
+        numberOfQuestions={numberOfQuestions}
+        showSettings={showSettings}
+        onFamilyToggle={toggleFamilySelection}
+        onTimeChange={setTimePerQuestion}
+        onQuestionsChange={setNumberOfQuestions}
+        onToggleSettings={() => setShowSettings(!showSettings)}
+        onStartGame={startGame}
+        onNavigateBack={() => navigate('/')}
+      />
     );
   }
 
+  // Render active game
   return (
     <div className="min-h-screen bg-blue-50 p-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <Card className="p-4 mb-4">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-sm font-medium text-gray-500">Pergunta</h2>
-              <p className="font-bold text-lg">{currentQuestionNumber} de {numberOfQuestions}</p>
-            </div>
-            <div>
-              <h2 className="text-sm font-medium text-gray-500">Pontuação</h2>
-              <p className="font-bold text-lg">{score}</p>
-            </div>
-          </div>
-        </Card>
+        <GameHeader
+          currentQuestionNumber={currentQuestionNumber}
+          totalQuestions={numberOfQuestions}
+          score={score}
+        />
 
         {/* Timer */}
         <CountdownTimer 
@@ -278,58 +181,28 @@ const TrainingMode = () => {
           className="mb-6"
         />
 
-        {/* Question */}
+        {/* Question and Options */}
         {currentQuestion && (
-          <div className="flex flex-col items-center mb-8">
-            <h2 className="text-xl md:text-2xl font-bold mb-4">
-              Qual o nome do elemento com o símbolo:
-            </h2>
-            <ElementSymbol element={currentQuestion} />
-            
-            {hasAnswered && roundActive && (
-              <div className="mt-4 text-green-600 font-medium">
-                Resposta enviada!
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Options */}
-        {options.length > 0 && (
-          <AnswerOptions
+          <GameQuestion
+            currentQuestion={currentQuestion}
             options={options}
-            onSelect={handleAnswerSelect}
             selectedAnswer={selectedAnswer}
             correctAnswer={correctAnswer}
             showResults={showResults}
-            disabled={!roundActive || hasAnswered}
+            roundActive={roundActive}
+            hasAnswered={hasAnswered}
+            onAnswerSelect={handleAnswerSelect}
           />
         )}
 
         {/* Results */}
-        {showResults && (
-          <div className="mt-8 text-center">
-            {selectedAnswer ? (
-              selectedAnswer.symbol === correctAnswer?.symbol ? (
-                <p className="text-xl font-bold text-green-600">Correto! Você acertou!</p>
-              ) : (
-                <p className="text-xl font-bold text-red-600">
-                  Incorreto! A resposta certa era {correctAnswer?.name}.
-                </p>
-              )
-            ) : (
-              <p className="text-xl font-bold text-orange-600">
-                Tempo esgotado! A resposta certa era {correctAnswer?.name}.
-              </p>
-            )}
-            <p className="mt-2 text-gray-600">
-              {currentQuestionNumber < numberOfQuestions 
-                ? "Próxima pergunta em instantes..." 
-                : "Finalizando treino..."
-              }
-            </p>
-          </div>
-        )}
+        <GameFeedback
+          showResults={showResults}
+          selectedAnswer={selectedAnswer}
+          correctAnswer={correctAnswer}
+          currentQuestionNumber={currentQuestionNumber}
+          totalQuestions={numberOfQuestions}
+        />
       </div>
     </div>
   );
