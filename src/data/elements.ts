@@ -93,7 +93,7 @@ export function generateQuestion(
   selectedFamilies: ElementFamily[],
   excludeElements: Element[] = []
 ): { question: Element; options: Element[] } {
-  // Get elements from selected families
+  // Get elements from selected families for questions
   const availableElements = PERIODIC_TABLE.filter(
     element => 
       selectedFamilies.includes(element.family) && 
@@ -105,26 +105,38 @@ export function generateQuestion(
     const randomElement = PERIODIC_TABLE[Math.floor(Math.random() * PERIODIC_TABLE.length)];
     return {
       question: randomElement,
-      options: [randomElement]
+      options: [randomElement, ...PERIODIC_TABLE.filter(e => e.symbol !== randomElement.symbol).slice(0, 3)]
     };
   }
 
   // Select random element as question
   const questionElement = availableElements[Math.floor(Math.random() * availableElements.length)];
 
-  // Get 3 random wrong options
+  // Get all other elements (from any family) for wrong options
   const otherElements = PERIODIC_TABLE.filter(
     element => element.symbol !== questionElement.symbol
   );
   
+  // Shuffle and get exactly 3 wrong options
   const shuffled = otherElements.sort(() => 0.5 - Math.random());
   const wrongOptions = shuffled.slice(0, 3);
 
-  // Combine correct and wrong options and shuffle
-  const allOptions = [questionElement, ...wrongOptions].sort(() => 0.5 - Math.random());
+  // Ensure we always have exactly 4 options
+  const allOptions = [questionElement, ...wrongOptions];
+  
+  // If somehow we don't have 4 options, fill with random elements
+  while (allOptions.length < 4) {
+    const randomElement = PERIODIC_TABLE[Math.floor(Math.random() * PERIODIC_TABLE.length)];
+    if (!allOptions.find(opt => opt.symbol === randomElement.symbol)) {
+      allOptions.push(randomElement);
+    }
+  }
+
+  // Shuffle the final options and ensure exactly 4
+  const finalOptions = allOptions.slice(0, 4).sort(() => 0.5 - Math.random());
 
   return {
     question: questionElement,
-    options: allOptions
+    options: finalOptions
   };
 }
