@@ -45,7 +45,7 @@ const Index = () => {
               <div className="bg-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center mb-4 text-xl font-bold">1</div>
               <h3 className="text-xl font-bold mb-2">Escolha Seu Modo</h3>
               <p className="text-gray-600">
-                Escolha entre o modo padrão e o modo infinito para praticar.
+                Selecione o modo Padrão ou o modo Infinito para começar a praticar.
               </p>
             </div>
             
@@ -76,7 +76,7 @@ const Index = () => {
           <h2 className="text-3xl font-bold text-center mb-8">Tabela Periódica dos Elementos</h2>
           <div className="flex justify-center">
             <img 
-              src="/lovable-uploads/135a6d86-f180-4ccd-9ffe-e9cd2f467a17.png" 
+              src="/lovable-uploads/ab96dcd1-bd13-4c3d-a3cd-447f1fa54bcc.png" 
               alt="Tabela Periódica dos Elementos"
               className="w-full max-w-6xl h-auto rounded-lg shadow-lg"
             />

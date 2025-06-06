@@ -199,7 +199,7 @@ const TrainingMode = () => {
                   <Slider 
                     value={[numberOfQuestions]} 
                     min={5} 
-                    max={30} 
+                    max={50} 
                     step={5}
                     onValueChange={(value) => setNumberOfQuestions(value[0])} 
                     className="w-full max-w-sm"
