@@ -19,6 +19,8 @@ const GameFeedback: React.FC<GameFeedbackProps> = ({
 }) => {
   if (!showResults) return null;
 
+  const isInfiniteMode = totalQuestions === 0;
+
   return (
     <div className="mt-8 text-center">
       {selectedAnswer ? (
@@ -34,12 +36,17 @@ const GameFeedback: React.FC<GameFeedbackProps> = ({
           Tempo esgotado! A resposta certa era {correctAnswer?.name}.
         </p>
       )}
-      <p className="mt-2 text-gray-600">
-        {currentQuestionNumber < totalQuestions 
-          ? "Próxima pergunta em instantes..." 
-          : "Finalizando treino..."
-        }
-      </p>
+      
+      {selectedAnswer?.symbol === correctAnswer?.symbol && (
+        <p className="mt-2 text-gray-600">
+          {isInfiniteMode 
+            ? "Próxima pergunta em instantes..." 
+            : currentQuestionNumber < totalQuestions 
+              ? "Próxima pergunta em instantes..." 
+              : "Finalizando treino..."
+          }
+        </p>
+      )}
     </div>
   );
 };

@@ -10,6 +10,7 @@ import Join from "./pages/Join";
 import StudentGame from "./pages/StudentGame";
 import TeacherGame from "./pages/TeacherGame";
 import TrainingMode from "./pages/TrainingMode";
+import InfiniteMode from "./pages/InfiniteMode";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/student-game" element={<StudentGame />} />
             <Route path="/teacher-game" element={<TeacherGame />} />
             <Route path="/training" element={<TrainingMode />} />
+            <Route path="/infinite" element={<InfiniteMode />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

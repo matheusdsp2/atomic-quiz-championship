@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -24,7 +23,7 @@ const Index = () => {
             Modo Padrão
           </Button>
           <Button 
-            onClick={() => navigate('/training')}
+            onClick={() => navigate('/infinite')}
             className="bg-blue-600 text-white hover:bg-blue-700 text-lg px-8 py-6 border-2 border-white"
             size="lg"
             variant="outline"
@@ -96,7 +95,7 @@ const Index = () => {
             Modo Padrão
           </Button>
           <Button 
-            onClick={() => navigate('/training')}
+            onClick={() => navigate('/infinite')}
             className="bg-green-600 hover:bg-green-700 text-lg px-8 py-6"
             size="lg"
           >
