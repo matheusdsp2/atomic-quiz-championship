@@ -2,6 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import PeriodicTable from '@/components/PeriodicTable';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -17,11 +18,11 @@ const Index = () => {
         
         <div className="space-y-4 md:space-y-0 md:space-x-4 md:flex">
           <Button 
-            onClick={() => navigate('/join')}
+            onClick={() => navigate('/training')}
             className="bg-white text-blue-700 hover:bg-blue-50 text-lg px-8 py-6"
             size="lg"
           >
-            Jogar Online
+            Modo Padrão
           </Button>
           <Button 
             onClick={() => navigate('/training')}
@@ -29,7 +30,7 @@ const Index = () => {
             size="lg"
             variant="outline"
           >
-            Modo Treino
+            Modo Infinito
           </Button>
         </div>
       </div>
@@ -45,7 +46,7 @@ const Index = () => {
               <div className="bg-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center mb-4 text-xl font-bold">1</div>
               <h3 className="text-xl font-bold mb-2">Escolha Seu Modo</h3>
               <p className="text-gray-600">
-                Jogue online com outros estudantes ou pratique sozinho no modo treino.
+                Escolha entre o modo padrão e o modo infinito para praticar.
               </p>
             </div>
             
@@ -69,24 +70,36 @@ const Index = () => {
           </div>
         </div>
       </div>
+
+      {/* Periodic Table Section */}
+      <div className="bg-gray-50 py-16">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center mb-8">Tabela Periódica - Elementos Representativos</h2>
+          <p className="text-center text-gray-600 mb-8">
+            Elementos em <span className="bg-blue-500 text-white px-2 py-1 rounded">azul</span> são famílias 1A-7A e 
+            <span className="bg-purple-500 text-white px-2 py-1 rounded ml-2">roxo</span> são gases nobres
+          </p>
+          <PeriodicTable />
+        </div>
+      </div>
       
       {/* Call to Action */}
       <div className="bg-gray-100 py-12 text-center">
         <h2 className="text-3xl font-bold mb-6">Pronto para Começar?</h2>
         <div className="space-x-4">
           <Button 
-            onClick={() => navigate('/join')}
+            onClick={() => navigate('/training')}
             className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-6"
             size="lg"
           >
-            Jogar Online
+            Modo Padrão
           </Button>
           <Button 
             onClick={() => navigate('/training')}
             className="bg-green-600 hover:bg-green-700 text-lg px-8 py-6"
             size="lg"
           >
-            Treinar Solo
+            Modo Infinito
           </Button>
         </div>
       </div>

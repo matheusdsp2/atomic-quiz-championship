@@ -163,12 +163,12 @@ const TrainingMode = () => {
               <ArrowLeft className="h-4 w-4 mr-2" />
               Voltar
             </Button>
-            <h1 className="text-3xl font-bold text-blue-800">Modo Treino</h1>
+            <h1 className="text-3xl font-bold text-blue-800">Modo Padrão</h1>
           </div>
 
           <Card className="p-6">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold">Configurações do Treino</h2>
+              <h2 className="text-xl font-bold">Configurações do Modo Padrão</h2>
               <Button 
                 variant={showSettings ? "outline" : "default"}
                 onClick={() => setShowSettings(!showSettings)}
@@ -234,7 +234,7 @@ const TrainingMode = () => {
                 className="w-full text-lg py-6"
                 disabled={selectedFamilies.length === 0}
               >
-                Iniciar Treino
+                Iniciar Modo Padrão
               </Button>
             </div>
           </Card>
