@@ -1,10 +1,8 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import CountdownTimer from '@/components/CountdownTimer';
-import GameResults from '@/components/GameResults';
 import GameHeader from '@/components/GameHeader';
 import GameQuestion from '@/components/GameQuestion';
 import GameFeedback from '@/components/GameFeedback';
@@ -130,15 +128,40 @@ const InfiniteMode = () => {
     setTimePerQuestion(20);
   };
 
+  // Get performance message based on score
+  const getPerformanceMessage = (score: number) => {
+    if (score >= 50) return "🧪 Químico Nato!";
+    if (score >= 40) return "🏆 Mestre dos Elementos!";
+    if (score >= 30) return "🌟 Expert em Química!";
+    if (score >= 20) return "💎 Excelente Desempenho!";
+    if (score >= 10) return "👏 Muito Bem!";
+    if (score >= 5) return "✨ Bom Trabalho!";
+    return "💪 Continue Praticando!";
+  };
+
   // Render game finished screen
   if (gameFinished) {
     return (
-      <GameResults
-        score={score}
-        totalQuestions={score} // In infinite mode, total questions = score
-        onResetGame={resetGame}
-        onNavigateHome={() => navigate('/')}
-      />
+      <div className="min-h-screen bg-gradient-to-b from-green-500 to-emerald-700 p-4 flex items-center justify-center">
+        <div className="bg-white rounded-lg p-8 shadow-lg max-w-md w-full text-center">
+          <h2 className="text-2xl font-bold mb-4">Modo Infinito Concluído!</h2>
+          
+          <div className="bg-green-50 rounded-lg p-6 mb-6">
+            <div className="text-3xl mb-2">{getPerformanceMessage(score)}</div>
+            <p className="text-lg text-gray-700 mb-2">Questões respondidas:</p>
+            <p className="text-5xl font-bold text-green-700">{score}</p>
+          </div>
+          
+          <div className="space-y-3">
+            <Button onClick={resetGame} className="w-full bg-green-600 hover:bg-green-700">
+              Jogar Novamente
+            </Button>
+            <Button variant="outline" onClick={() => navigate('/')} className="w-full">
+              Voltar ao Menu
+            </Button>
+          </div>
+        </div>
+      </div>
     );
   }
 
@@ -174,7 +197,6 @@ const InfiniteMode = () => {
                   <li>• Todas as famílias de elementos estão incluídas</li>
                   <li>• Comece com 20 segundos por pergunta</li>
                   <li>• A cada 10 acertos, o tempo diminui em 5 segundos</li>
-                  <li>• Tempo mínimo: 5 segundos por pergunta</li>
                   <li>• O jogo termina ao errar uma pergunta</li>
                 </ul>
               </div>
