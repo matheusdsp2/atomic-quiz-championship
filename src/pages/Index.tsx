@@ -2,7 +2,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import PeriodicTable from '@/components/PeriodicTable';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -74,12 +73,14 @@ const Index = () => {
       {/* Periodic Table Section */}
       <div className="bg-gray-50 py-16">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center mb-8">Tabela Periódica - Elementos Representativos</h2>
-          <p className="text-center text-gray-600 mb-8">
-            Elementos em <span className="bg-blue-500 text-white px-2 py-1 rounded">azul</span> são famílias 1A-7A e 
-            <span className="bg-purple-500 text-white px-2 py-1 rounded ml-2">roxo</span> são gases nobres
-          </p>
-          <PeriodicTable />
+          <h2 className="text-3xl font-bold text-center mb-8">Tabela Periódica dos Elementos</h2>
+          <div className="flex justify-center">
+            <img 
+              src="/lovable-uploads/135a6d86-f180-4ccd-9ffe-e9cd2f467a17.png" 
+              alt="Tabela Periódica dos Elementos"
+              className="w-full max-w-6xl h-auto rounded-lg shadow-lg"
+            />
+          </div>
         </div>
       </div>
       
