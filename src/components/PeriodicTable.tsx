@@ -68,17 +68,8 @@ const elements: ElementData[] = [
 ];
 
 const PeriodicTable = () => {
-  const getElementsByPeriod = (period: number) => {
-    const periodRanges = {
-      1: [1, 2],
-      2: [3, 10],
-      3: [11, 18],
-      4: [19, 20, 31, 32, 33, 34, 35, 36],
-      5: [37, 38, 49, 50, 51, 52, 53, 54],
-      6: [55, 56, 81, 82, 83, 84, 85, 86]
-    };
-    
-    return elements.filter(el => periodRanges[period as keyof typeof periodRanges]?.includes(el.atomicNumber));
+  const getElementByAtomicNumber = (atomicNumber: number): ElementData | null => {
+    return elements.find(el => el.atomicNumber === atomicNumber) || null;
   };
 
   const ElementCell = ({ element }: { element: ElementData }) => {
@@ -101,13 +92,19 @@ const PeriodicTable = () => {
     <div className="min-w-[60px] h-16"></div>
   );
 
+  const renderElementOrEmpty = (atomicNumber: number) => {
+    const element = getElementByAtomicNumber(atomicNumber);
+    return element ? <ElementCell element={element} /> : <EmptyCell />;
+  };
+
   return (
     <div className="overflow-x-auto">
       <div className="min-w-[800px] space-y-2">
         {/* Headers */}
         <div className="grid grid-cols-18 gap-1 mb-4">
           <div className="text-center font-bold text-sm">1A</div>
-          <div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+          <div className="text-center font-bold text-sm">2A</div>
+          <div></div><div></div><div></div><div></div><div></div><div></div>
           <div></div><div></div><div></div><div></div>
           <div className="text-center font-bold text-sm">3A</div>
           <div className="text-center font-bold text-sm">4A</div>
@@ -119,80 +116,80 @@ const PeriodicTable = () => {
 
         {/* Período 1 */}
         <div className="grid grid-cols-18 gap-1">
-          <ElementCell element={getElementsByPeriod(1)[0]} />
+          {renderElementOrEmpty(1)}
           <EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell />
           <EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell />
-          <ElementCell element={getElementsByPeriod(1)[1]} />
+          {renderElementOrEmpty(2)}
         </div>
 
         {/* Período 2 */}
         <div className="grid grid-cols-18 gap-1">
-          <ElementCell element={getElementsByPeriod(2)[0]} />
-          <ElementCell element={getElementsByPeriod(2)[1]} />
+          {renderElementOrEmpty(3)}
+          {renderElementOrEmpty(4)}
           <EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell />
           <EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell />
-          <ElementCell element={getElementsByPeriod(2)[2]} />
-          <ElementCell element={getElementsByPeriod(2)[3]} />
-          <ElementCell element={getElementsByPeriod(2)[4]} />
-          <ElementCell element={getElementsByPeriod(2)[5]} />
-          <ElementCell element={getElementsByPeriod(2)[6]} />
-          <ElementCell element={getElementsByPeriod(2)[7]} />
+          {renderElementOrEmpty(5)}
+          {renderElementOrEmpty(6)}
+          {renderElementOrEmpty(7)}
+          {renderElementOrEmpty(8)}
+          {renderElementOrEmpty(9)}
+          {renderElementOrEmpty(10)}
         </div>
 
         {/* Período 3 */}
         <div className="grid grid-cols-18 gap-1">
-          <ElementCell element={getElementsByPeriod(3)[0]} />
-          <ElementCell element={getElementsByPeriod(3)[1]} />
+          {renderElementOrEmpty(11)}
+          {renderElementOrEmpty(12)}
           <EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell />
           <EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell />
-          <ElementCell element={getElementsByPeriod(3)[2]} />
-          <ElementCell element={getElementsByPeriod(3)[3]} />
-          <ElementCell element={getElementsByPeriod(3)[4]} />
-          <ElementCell element={getElementsByPeriod(3)[5]} />
-          <ElementCell element={getElementsByPeriod(3)[6]} />
-          <ElementCell element={getElementsByPeriod(3)[7]} />
+          {renderElementOrEmpty(13)}
+          {renderElementOrEmpty(14)}
+          {renderElementOrEmpty(15)}
+          {renderElementOrEmpty(16)}
+          {renderElementOrEmpty(17)}
+          {renderElementOrEmpty(18)}
         </div>
 
         {/* Período 4 */}
         <div className="grid grid-cols-18 gap-1">
-          <ElementCell element={getElementsByPeriod(4)[0]} />
-          <ElementCell element={getElementsByPeriod(4)[1]} />
+          {renderElementOrEmpty(19)}
+          {renderElementOrEmpty(20)}
           <EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell />
           <EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell />
-          <ElementCell element={getElementsByPeriod(4)[2]} />
-          <ElementCell element={getElementsByPeriod(4)[3]} />
-          <ElementCell element={getElementsByPeriod(4)[4]} />
-          <ElementCell element={getElementsByPeriod(4)[5]} />
-          <ElementCell element={getElementsByPeriod(4)[6]} />
-          <ElementCell element={getElementsByPeriod(4)[7]} />
+          {renderElementOrEmpty(31)}
+          {renderElementOrEmpty(32)}
+          {renderElementOrEmpty(33)}
+          {renderElementOrEmpty(34)}
+          {renderElementOrEmpty(35)}
+          {renderElementOrEmpty(36)}
         </div>
 
         {/* Período 5 */}
         <div className="grid grid-cols-18 gap-1">
-          <ElementCell element={getElementsByPeriod(5)[0]} />
-          <ElementCell element={getElementsByPeriod(5)[1]} />
+          {renderElementOrEmpty(37)}
+          {renderElementOrEmpty(38)}
           <EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell />
           <EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell />
-          <ElementCell element={getElementsByPeriod(5)[2]} />
-          <ElementCell element={getElementsByPeriod(5)[3]} />
-          <ElementCell element={getElementsByPeriod(5)[4]} />
-          <ElementCell element={getElementsByPeriod(5)[5]} />
-          <ElementCell element={getElementsByPeriod(5)[6]} />
-          <ElementCell element={getElementsByPeriod(5)[7]} />
+          {renderElementOrEmpty(49)}
+          {renderElementOrEmpty(50)}
+          {renderElementOrEmpty(51)}
+          {renderElementOrEmpty(52)}
+          {renderElementOrEmpty(53)}
+          {renderElementOrEmpty(54)}
         </div>
 
         {/* Período 6 */}
         <div className="grid grid-cols-18 gap-1">
-          <ElementCell element={getElementsByPeriod(6)[0]} />
-          <ElementCell element={getElementsByPeriod(6)[1]} />
+          {renderElementOrEmpty(55)}
+          {renderElementOrEmpty(56)}
           <EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell />
           <EmptyCell /><EmptyCell /><EmptyCell /><EmptyCell />
-          <ElementCell element={getElementsByPeriod(6)[2]} />
-          <ElementCell element={getElementsByPeriod(6)[3]} />
-          <ElementCell element={getElementsByPeriod(6)[4]} />
-          <ElementCell element={getElementsByPeriod(6)[5]} />
-          <ElementCell element={getElementsByPeriod(6)[6]} />
-          <ElementCell element={getElementsByPeriod(6)[7]} />
+          {renderElementOrEmpty(81)}
+          {renderElementOrEmpty(82)}
+          {renderElementOrEmpty(83)}
+          {renderElementOrEmpty(84)}
+          {renderElementOrEmpty(85)}
+          {renderElementOrEmpty(86)}
         </div>
 
         {/* Legenda */}
